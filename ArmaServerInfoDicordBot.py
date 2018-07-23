@@ -91,10 +91,10 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 	def returnLatestStatus(self):
 		underscore = 44*"─"
 		if self.ArmaServer.online:
-			status = "online"
+			status = "Online"
 			color = 0x008000
 		else:
-			status = "offline"
+			status = "Offline"
 			color = 0xff0000
 		name = self.ArmaServer.name if self.ArmaServer.name else "Unknown Server Name"
 		name = re.sub(r'[^\x00-\x7F]+',' ', name)
