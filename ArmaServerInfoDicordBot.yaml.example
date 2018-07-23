@@ -4,4 +4,4 @@ discord_bot:
     info_update_timeout: 60
 arma_server_query:
     max_response_timeout: 3
-    server_address: ["138.201.197.68", 2502]
+    server_address: ["127.0.0.1", 2302]
