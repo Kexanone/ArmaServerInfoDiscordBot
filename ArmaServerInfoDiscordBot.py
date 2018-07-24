@@ -118,10 +118,6 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 	
 	async def postLatestStatus(self):
 		embed = self.returnLatestStatus()
-		print(embed.title)
-		print(embed.description)
-		for field in embed.fields:
-			print(field)
 		try:
 			try:
 				self.message = await self.get_message(self.channel, self.message.id)
