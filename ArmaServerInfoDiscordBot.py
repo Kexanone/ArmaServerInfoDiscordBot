@@ -92,10 +92,10 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 		underscore = 44*"─"
 		if self.ArmaServer.online:
 			status = "Online"
-			color = 0x008000
+			color = 0x43B581
 		else:
 			status = "Offline"
-			color = 0xff0000
+			color = 0xF04747
 		name = self.ArmaServer.name if self.ArmaServer.name else "Unknown Server Name"
 		name = re.sub(r'[^\x00-\x7F]+',' ', name)
 		embed = discord.Embed(title=name, description=underscore, color=color)
