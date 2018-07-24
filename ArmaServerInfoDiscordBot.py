@@ -150,4 +150,4 @@ if __name__ == "__main__":
 	except discord.errors.LoginFailure as message:
 		perror("Discord login error:", message)
 	except discord.ext.commands.errors.CommandNotFound as message:
-		perror("Dicord command error:", message)
+		perror("Discord command error:", message)
