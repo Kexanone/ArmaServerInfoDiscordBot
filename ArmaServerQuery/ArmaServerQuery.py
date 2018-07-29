@@ -5,7 +5,7 @@ from socket import socket, gethostname, AF_INET, SOCK_DGRAM, timeout
 from struct import unpack
 
 # test host address
-HOST_ADDRESS = ("127.0.0.1", 2303)
+HOST_ADDRESS = ("127.0.0.1", 2302)
 # default maximal query response timeout
 DEFAULT_MAX_RESPONSE_TIMEOUT = None
 # set default buffer size
@@ -67,17 +67,17 @@ class SteamServerQuery:
 		idx_start = 1 + self.response.find(b"\x11")
 		idx_end = self.response.find(b"\x00", idx_start)
 		name = self.response[idx_start:idx_end]
-		self.server.name = name.decode("iso-8859-1")
+		self.server.name = name.decode("UTF-8")
 		# get map
 		idx_start = 1 + idx_end
 		idx_end = self.response.find(b"\x00", idx_start)
 		map = self.response[idx_start:idx_end]
-		self.server.map = map.decode("iso-8859-1")
+		self.server.map = map.decode("UTF-8")
 		# get mission
 		idx_start = 1 + self.response.find(b"\x00", idx_end+1)
 		idx_end = self.response.find(b"\x00", idx_start)
 		mission = self.response[idx_start:idx_end]
-		self.server.mission = mission.decode("iso-8859-1")
+		self.server.mission = mission.decode("UTF-8")
 		# get player numbers
 		idx = 3 + self.response.find(b"\x00", idx_end)
 		playerCount = int.from_bytes(self.response[idx:idx+1], byteorder="big")
@@ -120,7 +120,7 @@ class SteamServerQuery:
 			if idx_end < 0:
 				break
 			name = self.response[idx_start:idx_end]
-			player = Player(name.decode("iso-8859-1"))
+			player = Player(name.decode("UTF-8"))
 			# get score
 			idx = 1 + idx_end
 			# exit when date is incomplete
@@ -168,7 +168,8 @@ class ArmaServer:
 
 if __name__ == "__main__":
 	# test run
-	AchillesPublicServer = ArmaServer(*HOST_ADDRESS)
+	AchillesPublicServer = ArmaServer(HOST_ADDRESS)
+	AchillesPublicServer.updateInfo()
 	print(AchillesPublicServer.__dict__)
 	for player in AchillesPublicServer.playerList:
 		print(player.__dict__)

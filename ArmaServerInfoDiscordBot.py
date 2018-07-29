@@ -3,7 +3,6 @@
 import discord
 from discord.ext import commands
 import asyncio
-import ArmaServerQuery
 from ArmaServerQuery import *
 import sys, re
 import yaml
@@ -97,7 +96,6 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 			status = "Offline"
 			color = 0xF04747
 		name = self.ArmaServer.name if self.ArmaServer.name else "Unknown Server Name"
-		name = re.sub(r'[^\x00-\x7F]+',' ', name)
 		embed = discord.Embed(title=name, description=underscore, color=color)
 		currentTime = datetime.utcnow().strftime("%H:%M:%S")
 		embed.add_field(name="Query Time:", value="{} (UTC)".format(currentTime), inline=False)
