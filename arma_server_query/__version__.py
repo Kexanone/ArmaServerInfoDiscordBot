@@ -1,0 +1,5 @@
+__title__ = "arma_server_query"
+__description__ = "Arma Server Query for Humans"
+__version__ = "1.0.0"
+__author__ = "oOKexOo"
+__license__ = "MIT"
