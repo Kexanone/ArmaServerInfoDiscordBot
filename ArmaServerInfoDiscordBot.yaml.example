@@ -2,6 +2,6 @@ discord_bot:
     token: "<bot token>"
     channel_id: "<channel>"
     info_update_timeout: 60
-arma_server_query:
+arma_server:
     max_response_timeout: 3
-    server_address: ["127.0.0.1", 2302]
+    address: ["127.0.0.1", 2302]

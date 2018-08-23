@@ -3,14 +3,19 @@
 import discord
 from discord.ext import commands
 import asyncio
-from ArmaServerQuery import *
+from arma_server_query import ArmaServer
 import sys, re
 import yaml
 from operator import attrgetter
 from datetime import datetime
 
-# other parameters
-STORAGE_FILE = __file__[:-2] + "bin"
+# default discord parameters
+INFO_UPDATE_TIMEOUT = 30
+COMMAND_PREFIX = "!"
+
+# file names
+CONFIG_FILE = __file__[:-2] + "yaml"
+CHANNEL_FILE = __file__[:-2] + "bin"
 
 def perror(*args, sep=" ", **kwargs):
 	'''
@@ -23,20 +28,20 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 	'''
 	Discord bot that updates the Arma server info
 	'''
-	def __init__(self, botToken, ArmaServer, *args, channelId="", infoUpdateTimeout=30, **kwargs):
-		super().__init__(*args, **kwargs)
+	def __init__(self, bot_token, arma_server, channel_id="", info_update_timeout=INFO_UPDATE_TIMEOUT, **kwargs):
+		super().__init__(**kwargs)
 		
 		# set attributes
-		self.botToken = botToken
-		self.ArmaServer = ArmaServer
-		self.infoUpdateTimeout = infoUpdateTimeout
-		self.channel = discord.Object(id=channelId)
+		self.bot_token = bot_token
+		self.arma_server = ArmaServer
+		self.info_update_timeout = info_update_timeout
+		self.channel = discord.Object(id=channel_id)
 		try:
 			with open(STORAGE_FILE, "rb") as file:
-				messageId = str(int.from_bytes(file.read(), byteorder="big"))
+				message_id = str(int.from_bytes(file.read(), byteorder="big"))
 		except FileNotFoundError:
-			messageId = ""
-		self.message = discord.Object(id=messageId)
+			message_id = ""
+		self.message = discord.Object(id=message_id)
 		
 		# add background process
 		self.loop.create_task(self.backgroundProcInfoUpdate())
@@ -62,7 +67,7 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 		'''
 		starts the bot
 		'''
-		return super().run(self.botToken, *args, **kwargs)
+		return super().run(self.bot_token, *args, **kwargs)
 	
 	async def send_status(self, *args, **kwargs):
 		return await super().send_message(self.channel, *args, **kwargs)
@@ -129,16 +134,16 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 
 if __name__ == "__main__":
 	# load configuration file
-	with open(__file__[:-2] + "yaml", "r") as configStream:
+	with open(CONFIG_FILE, "r") as config_stream:
 		try:
-			config = yaml.load(configStream)
+			config = yaml.load(config_stream)
 		except yaml.YAMLError as error:
 			perror("YAML parsing error:", error)
 			sys.exit(1)
 	# create instance of the Arma Server Query API
-	AchillesPublicServer = ArmaServer(config["arma_server_query"]["server_address"], maxResponseTimeout=config["arma_server_query"]["max_response_timeout"])
+	arma_server = ArmaServer(config["arma_server"]["address"], max_response_time=config["arma_server"]["max_response_timeout"])
 	# create and run the bot
-	bot = ArmaServerInfoDiscordBot(config["discord_bot"]["token"], AchillesPublicServer, command_prefix="!", channelId=config["discord_bot"]["channel_id"], infoUpdateTimeout=config["discord_bot"]["info_update_timeout"])
+	bot = ArmaServerInfoDiscordBot(config["discord_bot"]["token"], arma_server, command_prefix=COMMAND_PREFIX, channelId=config["discord_bot"]["channel_id"], infoUpdateTimeout=config["discord_bot"]["info_update_timeout"])
 	try:
 		bot.run()
 	except discord.errors.LoginFailure as message:
