@@ -129,6 +129,8 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 		server_info.setdefault("mission", "none")
 		mission = server_info["mission"] 
 		embed.add_field(name="Mission:", value=mission, inline=False)
+		server_info.setdefault("player_count", 0)
+		server_info.setdefault("player_limit", 0)
 		embed.add_field(name="Player Count:", value="{player_count}/{player_limit}".format(**server_info), inline=False)
 		if len(player_info_list) > 0:		
 			lines=["```py"]
