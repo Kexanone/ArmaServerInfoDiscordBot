@@ -116,21 +116,18 @@ class ArmaServerInfoDiscordBot(commands.Bot):
 		else:
 			status = "Offline"
 			color = 0xF04747
+		server_info.setdefault("name", "Unknown Server Name")
 		name = server_info["name"]
-		if not name:
-			name = "Unknown Server Name"
 		embed = discord.Embed(title=name, description=underscore, color=color)
 		currentTime = datetime.utcnow().strftime("%H:%M:%S")
 		embed.add_field(name="Query Time:", value="{} (UTC)".format(currentTime), inline=False)
 		embed.add_field(name="Status:", value=status, inline=False)
 		embed.add_field(name="Address:", value="steam://connect/{}:{}".format(*self.arma_server.address), inline=False)
+		server_info.setdefault("map", "nowhere")
 		map = server_info["map"]
-		if not map:
-			map = "nowhere"
 		embed.add_field(name="Map:", value=map, inline=False)
+		server_info.setdefault("mission", "none")
 		mission = server_info["mission"] 
-		if not mission:
-			mission = "none"
 		embed.add_field(name="Mission:", value=mission, inline=False)
 		embed.add_field(name="Player Count:", value="{player_count}/{player_limit}".format(**server_info), inline=False)
 		if len(player_info_list) > 0:		
